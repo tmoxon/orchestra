@@ -9,6 +9,5 @@
   "homepage": "https://github.com/tmoxon/orchestra",
   "repository": "https://github.com/tmoxon/orchestra",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
-  "category": "productivity"
+  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"]
 }
