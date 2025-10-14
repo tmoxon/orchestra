@@ -1,4 +1,4 @@
-# Superpowers
+# Orchestra
 
 Equip Claude with a comprehensive skills library of proven techniques, patterns, and tools.
 
@@ -72,9 +72,9 @@ If you forked the skills repository during setup, you can contribute improvement
 Find skills before starting any task:
 
 ```bash
-${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/find-skills              # All skills with descriptions
-${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/find-skills test         # Filter by pattern
-${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
+${ORCHESTRA_SKILLS}/skills/using-skills/find-skills              # All skills with descriptions
+${ORCHESTRA_SKILLS}/skills/using-skills/find-skills test         # Filter by pattern
+${ORCHESTRA_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
 ```
 
 ### Using Slash Commands
@@ -140,9 +140,9 @@ ${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/find-skills 'TDD|debug'  # Regex 
 
 **Using tools:**
 ```bash
-${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/find-skills              # Show all skills
-${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/find-skills pattern      # Search skills
-${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/skill-run <path> [args]  # Run any skill script
+${ORCHESTRA_SKILLS}/skills/using-skills/find-skills              # Show all skills
+${ORCHESTRA_SKILLS}/skills/using-skills/find-skills pattern      # Search skills
+${ORCHESTRA_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill script
 ```
 
 ## How It Works

@@ -2,4 +2,4 @@
 description: Execute plan in batches with review checkpoints
 ---
 
-Read and follow: ${SUPERPOWERS_SKILLS_ROOT}/skills/collaboration/executing-plans/SKILL.md
+Read and follow: ${ORCHESTRA_SKILLS}/skills/collaboration/executing-plans/SKILL.md
