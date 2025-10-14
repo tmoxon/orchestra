@@ -33,8 +33,13 @@ if [ "$has_core" = false ]; then
 fi
 
 # Run skills initialization script (handles clone/fetch/auto-update)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# Use CLAUDE_PLUGIN_ROOT if available (set by Claude Code), otherwise fallback to BASH_SOURCE
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+    PLUGIN_ROOT="$CLAUDE_PLUGIN_ROOT"
+else
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+fi
 
 # Pass repo configuration to initialization script
 init_output=$("${PLUGIN_ROOT}/lib/initialize-skills.sh" "${SKILL_REPOS[@]}" 2>&1 || echo "")

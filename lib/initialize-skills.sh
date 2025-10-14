@@ -9,7 +9,7 @@ REPO_CONFIGS=("$@")
 ORCHESTRA_ROOT="${HOME}/.config/orchestra"
 
 # Ensure the orchestra root directory exists
-mkdir -p "$ORCHESTRA_ROOT"
+mkdir -p "$ORCHESTRA_ROOT" 2>/dev/null || true
 
 # Track overall status
 ANY_UPDATED=false

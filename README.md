@@ -165,14 +165,25 @@ ${ORCHESTRA_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill
 
 ## Troubleshooting
 
+### Windows Path Handling
+
+On Windows, the plugin uses Git Bash to execute hook scripts. The hooks have been configured to work cross-platform by:
+- Using `cd` to change to the plugin directory before executing scripts
+- Using `$CLAUDE_PLUGIN_ROOT` environment variable when available
+- Avoiding direct Windows path interpolation in bash commands
+
+If you encounter path-related errors, ensure you have Git Bash installed (comes with Git for Windows).
+
 ### Permissions Error
 
 If the plugin reports a permissions error executing the shell script, you can explicitly set permissions on the .sh files:
 
+```bash
 chmod +x ~/.claude/plugins/cache/orchestra/hooks/session-start.sh
 chmod +x ~/.claude/plugins/cache/orchestra/lib/initialize-skills.sh
+```
 
-The reload vs code. If that still doesn't work, try running session-start.sh directly to debug.
+Then reload VS Code. If that still doesn't work, try running session-start.sh directly to debug.
 
 ### Uninstalling / Reinstalling plugins
 
