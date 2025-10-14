@@ -60,10 +60,10 @@ The plugin fetches and fast-forwards your local skills repository on each sessio
 
 If you forked the skills repository during setup, you can contribute improvements:
 
-1. Edit skills in `~/.config/superpowers/skills/`
+1. Edit skills in `~/.config/orchestra/skills/`
 2. Commit your changes
 3. Push to your fork
-4. Open a PR to `obra/superpowers-skills`
+4. Open a PR to `obra/orchestra-core-skills`
 
 ## Quick Start
 
@@ -163,8 +163,3 @@ ${SUPERPOWERS_SKILLS_ROOT}/skills/using-skills/skill-run <path> [args]  # Run an
 ## License
 
 MIT License - see LICENSE file for details
-
-## Support
-
-- **Issues**: https://github.com/obra/superpowers/issues
-- **Marketplace**: https://github.com/obra/superpowers-marketplace
