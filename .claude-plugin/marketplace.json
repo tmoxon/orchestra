@@ -1,0 +1,25 @@
+{
+  "name": "orchestra-marketplace",
+  "owner": {
+    "name": "Tim Moxon",
+    "email": "tmoxon@gmail.com"
+  },
+  "metadata": {
+    "description": "Helping curate and manage skills to extend Claude Code's capabilities",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "orchestra",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/tmoxon/orchestra.git"
+      },
+      "description": "Skills loader for Claude Code",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
+      "strict": true
+    }
+  ]
+}
