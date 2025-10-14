@@ -1,7 +1,7 @@
 {
   "name": "orchestra",
   "description": "Control the vibes with this skills manager for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Tim Moxon",
     "email": "tmoxon@gmail.com"
