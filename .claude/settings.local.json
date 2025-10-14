@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(*)"
+      "Bash(./hooks/session-start.sh:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []
