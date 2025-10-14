@@ -29,14 +29,17 @@ Read the introduction: [Superpowers for Claude Code](https://blog.fsck.com/2025/
 
 ## Installation
 
-### Install this repo
+### Install the plugin
 
-Clone this repository.
-
-Run:
+Run the following (note at time of writing the slash command doesn't work in the vs code extension):
 ```bash
-/plugin install .
+claude /plugin
 ```
+- Select "add marketplace"
+- Enter https://github.com/tmoxon/orchestra
+- Agree to set it up
+- Follow instructions to install orchestra
+- Restart extensions
 
 The plugin automatically handles skills repository setup on first run.
 
@@ -159,6 +162,28 @@ ${ORCHESTRA_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill
 - **Complexity reduction** - Simplicity as primary goal
 - **Evidence over claims** - Verify before declaring success
 - **Domain over implementation** - Work at problem level, not solution level
+
+## Troubleshooting
+
+### Permissions Error
+
+If the plugin reports a permissions error executing the shell script, you can explicitly set permissions on the .sh files:
+
+chmod +x ~/.claude/plugins/cache/orchestra/hooks/session-start.sh
+chmod +x ~/.claude/plugins/cache/orchestra/lib/initialize-skills.sh
+
+The reload vs code. If that still doesn't work, try running session-start.sh directly to debug.
+
+### Uninstalling / Reinstalling plugins
+
+There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it, then:
+
+1. Delete the folder ~/.config/orchestra
+1. Delete the folder ~/.claude/plugins/cache/orchestra
+1. Update the file ~/.claude/settings.json to remove orchestra
+1. Restart vs code / claude
+
+
 
 ## License
 
