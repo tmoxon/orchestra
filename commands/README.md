@@ -5,6 +5,7 @@ Slash commands for Claude that reference skills.
 ## Available Commands
 
 - `/brainstorm` - Interactive idea refinement using Socratic method (→ `@skills/collaboration/brainstorming/SKILL.md`)
+- `/create-adr` - Create an Architectural Decision Record (→ `@skills/collaboration/create-adr/SKILL.md`)
 - `/write-plan` - Create detailed implementation plan (→ `@skills/collaboration/writing-plans/SKILL.md`)
 - `/execute-plan` - Execute plan in batches with review (→ `@skills/collaboration/executing-plans/SKILL.md`)
 

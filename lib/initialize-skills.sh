@@ -6,10 +6,10 @@ set -euo pipefail
 REPO_CONFIGS=("$@")
 
 # Base directory for all skill repositories
-ORCHESTRA_ROOT="${HOME}/.config/orchestra"
+UNI_ROOT="${HOME}/.config/uni"
 
-# Ensure the orchestra root directory exists
-mkdir -p "$ORCHESTRA_ROOT" 2>/dev/null || true
+# Ensure the uni root directory exists
+mkdir -p "$UNI_ROOT" 2>/dev/null || true
 
 # Track overall status
 ANY_UPDATED=false
@@ -24,7 +24,7 @@ for repo_config in "${REPO_CONFIGS[@]}"; do
         repo_branch="main"
     fi
 
-    REPO_DIR="$ORCHESTRA_ROOT/$repo_name"
+    REPO_DIR="$UNI_ROOT/$repo_name"
 
     # Check if repository directory exists and is a valid git repo
     if [ -d "$REPO_DIR/.git" ]; then

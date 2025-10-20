@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SessionStart hook for orchestra
+# SessionStart hook for uni
 
 set -euo pipefail
 
@@ -9,13 +9,13 @@ set -euo pipefail
 # Each repo should have: name, url, and optional branch
 # Format: "name|url|branch" (branch defaults to main if not specified)
 SKILL_REPOS=(
-    "core|https://github.com/tmoxon/orchestra-skills-core|main"
+    "core|https://github.com/tmoxon/uni-skills-core|main"
     # Add more repos here, e.g.:
     # "custom|https://github.com/youruser/custom-skills.git|main"
 )
 
-# Set ORCHESTRA_ROOT environment variable
-export ORCHESTRA_ROOT="${HOME}/.config/orchestra"
+# Set UNI_ROOT environment variable
+export UNI_ROOT="${HOME}/.config/uni"
 
 # Validate that at least one repository is named "core"
 has_core=false
@@ -28,7 +28,7 @@ for repo_config in "${SKILL_REPOS[@]}"; do
 done
 
 if [ "$has_core" = false ]; then
-    echo '{"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": "ERROR: orchestra configuration requires at least one repository named \"core\". Please check hooks/session-start.sh configuration."}}' >&2
+    echo '{"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": "ERROR: uni configuration requires at least one repository named \"core\". Please check hooks/session-start.sh configuration."}}' >&2
     exit 1
 fi
 
@@ -56,7 +56,7 @@ all_repos_list=""
 
 for repo_config in "${SKILL_REPOS[@]}"; do
     IFS='|' read -r repo_name repo_url repo_branch <<< "$repo_config"
-    repo_path="${ORCHESTRA_ROOT}/${repo_name}"
+    repo_path="${UNI_ROOT}/${repo_name}"
 
     if [ -d "$repo_path/skills" ]; then
         all_repos_list="${all_repos_list}\n- ${repo_name}: ${repo_path}/skills"
@@ -78,7 +78,7 @@ for repo_config in "${SKILL_REPOS[@]}"; do
 done
 
 # Read using-skills content from the core repository
-core_repo_path="${ORCHESTRA_ROOT}/core"
+core_repo_path="${UNI_ROOT}/core"
 using_skills_content=""
 
 if [ -f "$core_repo_path/skills/using-skills/SKILL.md" ]; then
@@ -86,7 +86,7 @@ if [ -f "$core_repo_path/skills/using-skills/SKILL.md" ]; then
 fi
 
 if [ -z "$using_skills_content" ]; then
-    using_skills_content="orchestra is ready. Skills are organized in repositories under ${ORCHESTRA_ROOT}/\n\nNote: Expected to find skills/using-skills/SKILL.md in core repository but it was not found."
+    using_skills_content="uni is ready. Skills are organized in repositories under ${UNI_ROOT}/\n\nNote: Expected to find skills/using-skills/SKILL.md in core repository but it was not found."
 fi
 
 # Escape outputs for JSON
@@ -112,7 +112,7 @@ cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "<EXTREMELY_IMPORTANT>\nYou have access to the orchestra.\n\n${init_message}**The content below is from skills/using-skills/SKILL.md - your introduction to using skills:**\n\n${using_skills_escaped}\n\n**orchestra Configuration:**\n- Root directory: ${ORCHESTRA_ROOT}\n- Active repositories:${repos_list_escaped}\n\n**Available skills across all repositories:**\n${skills_escaped}${status_message}\n</EXTREMELY_IMPORTANT>"
+    "additionalContext": "<EXTREMELY_IMPORTANT>\nYou have access to the uni.\n\n${init_message}**The content below is from skills/using-skills/SKILL.md - your introduction to using skills:**\n\n${using_skills_escaped}\n\n**uni Configuration:**\n- Root directory: ${UNI_ROOT}\n- Active repositories:${repos_list_escaped}\n\n**Available skills across all repositories:**\n${skills_escaped}${status_message}\n</EXTREMELY_IMPORTANT>"
   }
 }
 EOF

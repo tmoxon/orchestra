@@ -1,4 +1,4 @@
-# Orchestra
+# Uni!
 
 Equip Claude with a comprehensive skills library of proven techniques, patterns, and tools.
 
@@ -19,7 +19,7 @@ The plugin is a shim that:
 - **Meta Skills** - Creating, testing, and contributing skills
 
 Plus:
-- **Slash Commands** - `/brainstorm`, `/write-plan`, `/execute-plan`
+- **Slash Commands** - `/brainstorm`, `/write-adr`, `/write-plan`, `/execute-plan`
 - **Skills Search** - Grep-powered discovery of relevant skills
 - **Gap Tracking** - Failed searches logged for skill creation
 
@@ -36,9 +36,9 @@ Run the following (note at time of writing the slash command doesn't work in the
 claude /plugin
 ```
 - Select "add marketplace"
-- Enter https://github.com/tmoxon/orchestra
+- Enter https://github.com/tmoxon/uni
 - Agree to set it up
-- Follow instructions to install orchestra
+- Follow instructions to install uni
 - Restart extensions
 
 The plugin automatically handles skills repository setup on first run.
@@ -63,10 +63,10 @@ The plugin fetches and fast-forwards your local skills repository on each sessio
 
 If you forked the skills repository during setup, you can contribute improvements:
 
-1. Edit skills in `~/.config/orchestra/skills/`
+1. Edit skills in `~/.config/uni/skills/`
 2. Commit your changes
 3. Push to your fork
-4. Open a PR to `obra/orchestra-core-skills`
+4. Open a PR to `tmoxon/uni-core-skills`
 
 ## Quick Start
 
@@ -75,9 +75,9 @@ If you forked the skills repository during setup, you can contribute improvement
 Find skills before starting any task:
 
 ```bash
-${ORCHESTRA_SKILLS}/skills/using-skills/find-skills              # All skills with descriptions
-${ORCHESTRA_SKILLS}/skills/using-skills/find-skills test         # Filter by pattern
-${ORCHESTRA_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
+${UNI_SKILLS}/skills/using-skills/find-skills              # All skills with descriptions
+${UNI_SKILLS}/skills/using-skills/find-skills test         # Filter by pattern
+${UNI_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
 ```
 
 ### Using Slash Commands
@@ -143,9 +143,9 @@ ${ORCHESTRA_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
 
 **Using tools:**
 ```bash
-${ORCHESTRA_SKILLS}/skills/using-skills/find-skills              # Show all skills
-${ORCHESTRA_SKILLS}/skills/using-skills/find-skills pattern      # Search skills
-${ORCHESTRA_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill script
+${UNI_SKILLS}/skills/using-skills/find-skills              # Show all skills
+${UNI_SKILLS}/skills/using-skills/find-skills pattern      # Search skills
+${UNI_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill script
 ```
 
 ## How It Works
@@ -179,8 +179,8 @@ If you encounter path-related errors, ensure you have Git Bash installed (comes 
 If the plugin reports a permissions error executing the shell script, you can explicitly set permissions on the .sh files:
 
 ```bash
-chmod +x ~/.claude/plugins/cache/orchestra/hooks/session-start.sh
-chmod +x ~/.claude/plugins/cache/orchestra/lib/initialize-skills.sh
+chmod +x ~/.claude/plugins/cache/uni/hooks/session-start.sh
+chmod +x ~/.claude/plugins/cache/uni/lib/initialize-skills.sh
 ```
 
 Then reload VS Code. If that still doesn't work, try running session-start.sh directly to debug.
@@ -189,9 +189,9 @@ Then reload VS Code. If that still doesn't work, try running session-start.sh di
 
 There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it, then:
 
-1. Delete the folder ~/.config/orchestra
-1. Delete the folder ~/.claude/plugins/cache/orchestra
-1. Update the file ~/.claude/settings.json to remove orchestra
+1. Delete the folder ~/.config/uni
+1. Delete the folder ~/.claude/plugins/cache/uni
+1. Update the file ~/.claude/settings.json to remove uni
 1. Restart vs code / claude
 
 
