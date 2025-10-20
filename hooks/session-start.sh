@@ -17,6 +17,9 @@ SKILL_REPOS=(
 # Set UNI_ROOT environment variable
 export UNI_ROOT="${HOME}/.config/uni"
 
+# Set UNI_SKILLS to point to the core skills repository
+export UNI_SKILLS="${UNI_ROOT}/core"
+
 # Validate that at least one repository is named "core"
 has_core=false
 for repo_config in "${SKILL_REPOS[@]}"; do
