@@ -19,7 +19,7 @@ The plugin is a shim that:
 - **Meta Skills** - Creating, testing, and contributing skills
 
 Plus:
-- **Slash Commands** - `/brainstorm`, `/write-adr`, `/write-plan`, `/execute-plan`
+- **Slash Commands** - `/brainstorm`, `/create-adr`, `/write-plan`, `/execute-plan`
 - **Skills Search** - Grep-powered discovery of relevant skills
 - **Gap Tracking** - Failed searches logged for skill creation
 
