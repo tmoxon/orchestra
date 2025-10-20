@@ -115,7 +115,7 @@ cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "<EXTREMELY_IMPORTANT>\nYou have access to the uni.\n\n${init_message}**The content below is from skills/using-skills/SKILL.md - your introduction to using skills:**\n\n${using_skills_escaped}\n\n**uni Configuration:**\n- Root directory: ${UNI_ROOT}\n- Active repositories:${repos_list_escaped}\n\n**Available skills across all repositories:**\n${skills_escaped}${status_message}\n</EXTREMELY_IMPORTANT>"
+    "additionalContext": "<EXTREMELY_IMPORTANT>\nYou have access to the uni.\n\n${init_message}**The content below is from skills/using-skills/SKILL.md - your introduction to using skills:**\n\n${using_skills_escaped}\n\n**uni Configuration:**\n- Root directory: ${UNI_ROOT}\n- Skills directory: ${UNI_SKILLS}\n- Active repositories:${repos_list_escaped}\n\n**Available skills across all repositories:**\n${skills_escaped}${status_message}\n</EXTREMELY_IMPORTANT>"
   }
 }
 EOF
