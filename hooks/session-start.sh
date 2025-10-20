@@ -9,7 +9,7 @@ set -euo pipefail
 # Each repo should have: name, url, and optional branch
 # Format: "name|url|branch" (branch defaults to main if not specified)
 SKILL_REPOS=(
-    "core|https://github.com/tmoxon/uni-skills-core|main"
+    "core|https://github.com/tmoxon/uni-core-skills|main"
     # Add more repos here, e.g.:
     # "custom|https://github.com/youruser/custom-skills.git|main"
 )
