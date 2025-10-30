@@ -1,0 +1,26 @@
+{
+  "name": "uni-cli",
+  "version": "0.1.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/cli.js",
+    "plan": "node src/cli.js --repo /target --dry-run",
+    "apply": "node src/cli.js --repo /target --apply"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^2.0.29",
+    "glob": "^11.0.0",
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0",
+    "next": "^16.0.1",
+    "pg": "^8.16.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.2",
+    "@types/pg": "^8.15.6",
+    "@types/react": "^19.2.2",
+    "typescript": "^5.9.3"
+  }
+}

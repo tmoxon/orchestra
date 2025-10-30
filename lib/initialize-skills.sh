@@ -30,6 +30,13 @@ for repo_config in "${REPO_CONFIGS[@]}"; do
     if [ -d "$REPO_DIR/.git" ]; then
         cd "$REPO_DIR"
 
+        # Check if we need to switch branches
+        CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+        if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "$repo_branch" ]; then
+            echo "Switching $repo_name from branch '$CURRENT_BRANCH' to '$repo_branch'..."
+            git checkout "$repo_branch" 2>/dev/null || echo "Warning: Could not checkout branch $repo_branch for $repo_name"
+        fi
+
         # Get the remote name for the current tracking branch
         TRACKING_REMOTE=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null | cut -d'/' -f1 || echo "")
 

@@ -1,2 +1,5 @@
 .worktrees/
 .private-journal/
+
+# Dependencies
+node_modules/

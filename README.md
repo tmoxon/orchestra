@@ -59,6 +59,31 @@ The plugin automatically handles skills repository setup on first run.
 
 The plugin fetches and fast-forwards your local skills repository on each session start. If your local branch has diverged, Claude notifies you to use the pulling-updates-from-skills-repository skill.
 
+## Testing Skills Branches
+
+You can test different branches of the skills repository without restarting Docker:
+
+### Quick Branch Switch
+```bash
+./set-skills-branch.sh feature/new-instructions
+# Start new Claude session - it will use the new branch
+```
+
+### Manual Configuration
+Edit `.uni/config.json`:
+```json
+{
+  "skillsBranch": "your-branch-name"
+}
+```
+
+### Check Current Branch
+```bash
+./set-skills-branch.sh
+```
+
+The branch change takes effect on the **next Claude session start**
+
 ## Contributing Skills
 
 If you forked the skills repository during setup, you can contribute improvements:

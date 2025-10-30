@@ -1,0 +1,12 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: .Dockerfile
+    tty: true
+    stdin_open: true
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - ./.uni:/workspace/.uni
+      - ../test-driving-superpowers:/target

@@ -7,9 +7,29 @@ set -euo pipefail
 # CONFIGURATION: Define your skill repositories here
 # ============================================================================
 # Each repo should have: name, url, and optional branch
-# Format: "name|url|branch" (branch defaults to main if not specified)
+# Function to get skills branch from config
+get_skills_branch() {
+    local config_file="/workspace/.uni/config.json"
+    local default_branch="main"
+    
+    # Check if config file exists and read skillsBranch with jq
+    if [ -f "$config_file" ]; then
+        local branch=$(jq -r '.skillsBranch // empty' "$config_file" 2>/dev/null)
+        if [ -n "$branch" ] && [ "$branch" != "null" ]; then
+            echo "$branch"
+            return
+        fi
+    fi
+    
+    echo "$default_branch"
+}
+
+# Get branch from config file
+SKILLS_BRANCH=$(get_skills_branch)
+
+# Format: "name|url|branch" (branch read from .uni/config.json)
 SKILL_REPOS=(
-    "core|https://github.com/tmoxon/uni-core-skills|main"
+    "core|https://github.com/tmoxon/uni-core-skills|${SKILLS_BRANCH}"
     # Add more repos here, e.g.:
     # "custom|https://github.com/youruser/custom-skills.git|main"
 )
