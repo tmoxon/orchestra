@@ -30,21 +30,36 @@ for repo_config in "${REPO_CONFIGS[@]}"; do
     if [ -d "$REPO_DIR/.git" ]; then
         cd "$REPO_DIR"
 
+        # Get the remote name (try upstream first, then origin)
+        REMOTE_NAME=""
+        if git remote get-url upstream >/dev/null 2>&1; then
+            REMOTE_NAME="upstream"
+        elif git remote get-url origin >/dev/null 2>&1; then
+            REMOTE_NAME="origin"
+        fi
+
+        # Fetch from the remote to get latest branch information
+        if [ -n "$REMOTE_NAME" ]; then
+            echo "Fetching latest changes from $REMOTE_NAME..."
+            git fetch "$REMOTE_NAME" 2>/dev/null || true
+        fi
+
         # Check if we need to switch branches
         CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
         if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "$repo_branch" ]; then
             echo "Switching $repo_name from branch '$CURRENT_BRANCH' to '$repo_branch'..."
-            git checkout "$repo_branch" 2>/dev/null || echo "Warning: Could not checkout branch $repo_branch for $repo_name"
-        fi
-
-        # Get the remote name for the current tracking branch
-        TRACKING_REMOTE=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null | cut -d'/' -f1 || echo "")
-
-        # Fetch from tracking remote if set, otherwise try upstream then origin
-        if [ -n "$TRACKING_REMOTE" ]; then
-            git fetch "$TRACKING_REMOTE" 2>/dev/null || true
-        else
-            git fetch upstream 2>/dev/null || git fetch origin 2>/dev/null || true
+            
+            # Check if the branch exists locally
+            if git show-ref --verify --quiet "refs/heads/$repo_branch"; then
+                # Branch exists locally, just checkout
+                git checkout "$repo_branch" 2>/dev/null || echo "Warning: Could not checkout local branch $repo_branch for $repo_name"
+            elif [ -n "$REMOTE_NAME" ] && git show-ref --verify --quiet "refs/remotes/$REMOTE_NAME/$repo_branch"; then
+                # Branch exists on remote but not locally, create local branch tracking remote
+                echo "Creating local branch '$repo_branch' tracking $REMOTE_NAME/$repo_branch..."
+                git checkout -b "$repo_branch" "$REMOTE_NAME/$repo_branch" 2>/dev/null || echo "Warning: Could not create and checkout branch $repo_branch from $REMOTE_NAME/$repo_branch for $repo_name"
+            else
+                echo "Warning: Branch $repo_branch not found locally or on remote $REMOTE_NAME for $repo_name"
+            fi
         fi
 
         # Check if we can fast-forward

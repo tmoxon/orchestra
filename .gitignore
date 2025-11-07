@@ -3,3 +3,6 @@
 
 # Dependencies
 node_modules/
+
+# GitHub CLI installation files
+gh_*_linux_amd64/
