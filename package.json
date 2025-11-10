@@ -5,7 +5,11 @@
   "scripts": {
     "start": "node src/cli.js",
     "plan": "node src/cli.js --repo /target --dry-run",
-    "apply": "node src/cli.js --repo /target --apply"
+    "apply": "node src/cli.js --repo /target --apply",
+    "dev": "docker-compose up -d && code .",
+    "reset": "docker-compose down -v && docker-compose up -d",
+    "clean-target": "docker-compose exec dev rm -rf /target/* || true",
+    "fresh-start": "npm run reset && npm run clean-target"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^2.0.29",

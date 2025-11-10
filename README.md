@@ -55,6 +55,59 @@ The plugin automatically handles skills repository setup on first run.
 # /execute-plan - Execute plan in batches
 ```
 
+## Target Directory - Project Loading
+
+The uni dev container includes a `/target` directory where you can load external projects for analysis and development
+
+### Loading 
+
+```bash
+# 🗂️ Visual File Explorer (NEW!)
+# Load projects directly from host (recommended approach)
+# Opens at http://localhost:3333 - click "Load" next to any project!
+
+# Load projects from outside container (recommended)
+# Windows
+./load-project-from-host.ps1 "C:\dev\my-project"
+
+# Unix/Linux/Mac
+./load-project-from-host-unix.sh /Users/john/projects/my-app
+
+# Manage target directory
+./load-project-from-host.ps1 -Clear     # Clear (Windows)
+./load-project-from-host.ps1 -List      # List (Windows)
+./load-project-from-host-unix.sh --clear  # Clear (Unix)
+./load-project-from-host-unix.sh --list   # List (Unix)
+```
+
+### Loading from Host Machine
+
+Load projects from outside the container:
+
+```bash
+# From host machine (OS-specific)
+./load-project-from-host.ps1 "C:\dev\my-project"        # Windows (PowerShell)
+./load-project-from-host-unix.sh /Users/john/project      # Unix/Mac
+./load-project-from-host-windows.ps1 "C:\dev\my-project"  # Windows (direct)
+```
+
+### Available Loading Methods
+
+| Method | When to Use | Command |
+|--------|-------------|---------|
+| **From Host** | Load from outside container (recommended) | `./load-project-from-host.ps1` (Win) / `./load-project-from-host-unix.sh` (Unix) |
+| **Cross-Platform** | Windows PowerShell users | `./load-project-from-host.ps1` |
+| **Direct Windows** | Windows specific tasks | `./load-project-from-host-windows.ps1` |
+
+### Project Analysis Features
+
+When you load a project, uni automatically detects:
+
+- **Project Type**: Node.js, Python, Rust, Go, Java, etc.
+- **Package Files**: package.json, requirements.txt, Cargo.toml, etc.
+- **Git Information**: Repository status and remotes
+- **Documentation**: README files and project structure
+
 ## Updating Skills
 
 The plugin fetches and fast-forwards your local skills repository on each session start. If your local branch has diverged, Claude notifies you to use the pulling-updates-from-skills-repository skill.

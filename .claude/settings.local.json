@@ -80,7 +80,8 @@
       "Bash(fi)",
       "Bash(git clone:*)",
       "Bash(git fetch:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(npm --version)"
     ],
     "deny": [],
     "ask": []

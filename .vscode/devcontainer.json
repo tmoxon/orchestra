@@ -1,0 +1,17 @@
+{
+  "name": "Uni Dev Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "postStartCommand": "echo 'Dev container started. Target directory will be cleaned automatically.'",
+  "remoteUser": "dev",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-json",
+        "ms-python.python",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 .worktrees/
 .private-journal/
+target/
 
 # Dependencies
 node_modules/
