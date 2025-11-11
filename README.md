@@ -4,12 +4,7 @@ Equip Claude with a comprehensive skills library of proven techniques, patterns,
 
 This builds on the great work provided at [superpowers](https://github.com/obra/superpowers), extending with support for multiple skills sources
 
-## Architecture
-
-The plugin is a shim that:
-- Clones/updates configured repos 
-- Registers hooks that load skills from the local repository clones
-- Offers users the option to fork the skills repos for contributions
+> 💡 **For developers and contributors**, see [DEVELOPMENT.md](DEVELOPMENT.md) for architecture details, testing workflows, and contribution guidelines.
 
 ## What You Get
 
@@ -55,97 +50,6 @@ The plugin automatically handles skills repository setup on first run.
 # /execute-plan - Execute plan in batches
 ```
 
-## Target Directory - Project Loading
-
-The uni dev container includes a `/target` directory where you can load external projects for analysis and development
-
-### Loading 
-
-```bash
-# 🗂️ Visual File Explorer (NEW!)
-# Load projects directly from host (recommended approach)
-# Opens at http://localhost:3333 - click "Load" next to any project!
-
-# Load projects from outside container (recommended)
-# Windows
-./load-project-from-host.ps1 "C:\dev\my-project"
-
-# Unix/Linux/Mac
-./load-project-from-host-unix.sh /Users/john/projects/my-app
-
-# Manage target directory
-./load-project-from-host.ps1 -Clear     # Clear (Windows)
-./load-project-from-host.ps1 -List      # List (Windows)
-./load-project-from-host-unix.sh --clear  # Clear (Unix)
-./load-project-from-host-unix.sh --list   # List (Unix)
-```
-
-### Loading from Host Machine
-
-Load projects from outside the container:
-
-```bash
-# From host machine (OS-specific)
-./load-project-from-host.ps1 "C:\dev\my-project"        # Windows (PowerShell)
-./load-project-from-host-unix.sh /Users/john/project      # Unix/Mac
-./load-project-from-host-windows.ps1 "C:\dev\my-project"  # Windows (direct)
-```
-
-### Available Loading Methods
-
-| Method | When to Use | Command |
-|--------|-------------|---------|
-| **From Host** | Load from outside container (recommended) | `./load-project-from-host.ps1` (Win) / `./load-project-from-host-unix.sh` (Unix) |
-| **Cross-Platform** | Windows PowerShell users | `./load-project-from-host.ps1` |
-| **Direct Windows** | Windows specific tasks | `./load-project-from-host-windows.ps1` |
-
-### Project Analysis Features
-
-When you load a project, uni automatically detects:
-
-- **Project Type**: Node.js, Python, Rust, Go, Java, etc.
-- **Package Files**: package.json, requirements.txt, Cargo.toml, etc.
-- **Git Information**: Repository status and remotes
-- **Documentation**: README files and project structure
-
-## Updating Skills
-
-The plugin fetches and fast-forwards your local skills repository on each session start. If your local branch has diverged, Claude notifies you to use the pulling-updates-from-skills-repository skill.
-
-## Testing Skills Branches
-
-You can test different branches of the skills repository without restarting Docker:
-
-### Quick Branch Switch
-```bash
-./set-skills-branch.sh feature/new-instructions
-# Start new Claude session - it will use the new branch
-```
-
-### Manual Configuration
-Edit `.uni/config.json`:
-```json
-{
-  "skillsBranch": "your-branch-name"
-}
-```
-
-### Check Current Branch
-```bash
-./set-skills-branch.sh
-```
-
-The branch change takes effect on the **next Claude session start**
-
-## Contributing Skills
-
-If you forked the skills repository during setup, you can contribute improvements:
-
-1. Edit skills in `~/.config/uni/skills/`
-2. Commit your changes
-3. Push to your fork
-4. Open a PR to `tmoxon/uni-core-skills`
-
 ## Quick Start
 
 ### Finding Skills
@@ -174,6 +78,29 @@ ${UNI_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
 ```
 /execute-plan
 ```
+
+## Working with GitHub Issues
+
+Claude Code can work directly with GitHub issues during brainstorming sessions. Simply provide the repository URL and issue number:
+
+**Example:**
+```
+/brainstorm
+I want to work on https://github.com/tmoxon/uni issue #45
+```
+
+Claude will fetch the issue details and use them as context for:
+- Understanding feature requests with full discussion
+- Addressing bug reports with reproduction steps
+- Planning work that's already documented
+
+This works with any public GitHub repository. For private repositories, use the GitHub CLI to authenticate:
+
+```bash
+gh auth login
+```
+
+The GitHub CLI (`gh`) is included in the Uni Docker container.
 
 ## What's Inside
 
@@ -226,33 +153,7 @@ ${UNI_SKILLS}/skills/using-skills/find-skills pattern      # Search skills
 ${UNI_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill script
 ```
 
-## How It Works
-
-1. **SessionStart Hook** - Clone/update skills repo, inject skills context
-2. **Skills Discovery** - `find-skills` shows all available skills with descriptions
-3. **Mandatory Workflow** - Skills become required when they exist for your task
-4. **Gap Tracking** - Failed searches logged for skill development
-
-## Philosophy
-
-- **Test-Driven Development** - Write tests first, always
-- **Systematic over ad-hoc** - Process over guessing
-- **Complexity reduction** - Simplicity as primary goal
-- **Evidence over claims** - Verify before declaring success
-- **Domain over implementation** - Work at problem level, not solution level
-
 ## Troubleshooting
-
-### Windows Path Handling
-
-On Windows, the plugin uses Git Bash to execute hook scripts. The hooks have been configured to work cross-platform by:
-- Using `cd` to change to the plugin directory before executing scripts
-- Using `$CLAUDE_PLUGIN_ROOT` environment variable when available
-- Avoiding direct Windows path interpolation in bash commands
-
-If you encounter path-related errors, ensure you have Git Bash installed (comes with Git for Windows).
-
-### Permissions Error
 
 If the plugin reports a permissions error executing the shell script, you can explicitly set permissions on the .sh files:
 
@@ -271,8 +172,6 @@ There appear to be bugs in handling plugins through the marketplace connections.
 1. Delete the folder ~/.claude/plugins/cache/uni
 1. Update the file ~/.claude/settings.json to remove uni
 1. Restart vs code / claude
-
-
 
 ## License
 

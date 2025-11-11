@@ -81,7 +81,16 @@
       "Bash(git clone:*)",
       "Bash(git fetch:*)",
       "Bash(gh api:*)",
-      "Bash(npm --version)"
+      "Bash(npm --version)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npm run:*)",
+      "Bash(git branch:*)",
+      "Bash(git reset:*)",
+      "Bash(git push:*)",
+      "Bash(/tmp/base_version.ts)",
+      "Bash(/tmp/head_version.ts)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []
