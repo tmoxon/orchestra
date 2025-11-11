@@ -10,8 +10,6 @@ Uni uses a Docker-based development environment with pre-installed tools and dep
 
 - **Docker Desktop** or **Docker Compose** installed
 - Windows: Docker Desktop for Windows
-- macOS: Docker Desktop for Mac
-- Linux: Docker Engine + Docker Compose
 
 ### Starting the Environment
 
@@ -36,7 +34,7 @@ The development container comes with:
 
 - `.` → `/workspace` - Your Uni working directory
 - `./.uni` → `/workspace/.uni` - Configuration and skills
-- `target_workspace` → `/target` - Loaded projects (persistent volume)
+- `target_workspace` → `/target` - Loaded project (persistent volume)
 - `${UNI_TARGET_SOURCE}` → `/host_target` - Read-only access to host projects
 - `${UNI_HOST_ROOT}` → `/host_root` - Read-only access to host root (for project loading)
 
@@ -60,11 +58,7 @@ The uni dev container includes a `/target` directory where you can load external
 ### Loading 
 
 ```bash
-# 🗂️ Visual File Explorer (NEW!)
-# Load projects directly from host (recommended approach)
-# Opens at http://localhost:3333 - click "Load" next to any project!
-
-# Load projects from outside container (recommended)
+# Load projects from outside container
 # Windows
 ./load-project.ps1 "C:\dev\my-project"
 
@@ -103,15 +97,14 @@ The plugin fetches and fast-forwards your local skills repository on each sessio
 
 ## Testing Skills Branches
 
-You can test different branches of the skills repository without restarting Docker:
+You can test different branches of the skills repository by updating the configuration. Changes take effect on the **next Claude session start** (no Docker restart required).
 
-### Quick Branch Switch
+### Set Branch Using Script
 ```bash
 ./set-skills-branch.sh feature/new-instructions
-# Start new Claude session - it will use the new branch
 ```
 
-### Manual Configuration
+### Set Branch Manually
 Edit `.uni/config.json`:
 ```json
 {
@@ -122,9 +115,10 @@ Edit `.uni/config.json`:
 ### Check Current Branch
 ```bash
 ./set-skills-branch.sh
+# Shows current configured branch
 ```
 
-The branch change takes effect on the **next Claude session start**
+**Note:** The `SessionStart` hook reads `.uni/config.json` when Claude starts, so branch changes apply immediately on the next session without restarting Docker
 
 ## Contributing Skills
 
@@ -210,16 +204,6 @@ Each ADR includes:
 - **Evidence over claims** - Verify before declaring success
 - **Domain over implementation** - Work at problem level, not solution level
 
-## Advanced Troubleshooting
-
-### Windows Path Handling
-
-On Windows, the plugin uses Git Bash to execute hook scripts. The hooks have been configured to work cross-platform by:
-- Using `cd` to change to the plugin directory before executing scripts
-- Using `$CLAUDE_PLUGIN_ROOT` environment variable when available
-- Avoiding direct Windows path interpolation in bash commands
-
-If you encounter path-related errors, ensure you have Git Bash installed (comes with Git for Windows).
 
 ## License
 
