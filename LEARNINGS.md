@@ -21,7 +21,7 @@ The files tend to be very large:
 - Longer skills files lead to increased token count as the agent reads them
 - Each session start loads the full skills context
 
-Overall, the trade-off between token cost and reliability is justified - the predictable, high-quality outcomes produced by well-structured skills outweigh the increased resource usage.
+The trade-off between token cost and reliability appears acceptable so far, but more experience is needed to fully evaluate whether the resource usage is optimal for all use cases.
 
 ## Parallel Task Execution
 
