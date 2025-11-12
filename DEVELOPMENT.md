@@ -4,7 +4,17 @@ This guide covers development workflows, architecture details, and contribution 
 
 ## Development Environment
 
-Uni uses a Docker-based development environment with pre-installed tools and dependencies.
+Currently, Uni does not work in Claude Code in Windows due to problems with how file paths are handled. Supported approaches are:
+
+### WSL
+Developing with VS Code connected to WSL is a good way to benefit from a Linux-based developer experience. Follow the guide here: https://code.visualstudio.com/docs/remote/wsl
+Once you have set up your WSL environment then you can follow the details in README.md.
+
+### Mac
+On a Mac you follow the installation guidance in README.md.
+
+### Docker
+This repo provides a Docker-based development environment with pre-installed tools and dependencies.
 
 ### Prerequisites
 
