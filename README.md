@@ -5,6 +5,8 @@ Equip Claude with a comprehensive skills library of proven techniques, patterns,
 This builds on the great work provided at [superpowers](https://github.com/obra/superpowers), extending with support for multiple skills sources
 
 > 💡 **For developers and contributors**, see [DEVELOPMENT.md](DEVELOPMENT.md) for architecture details, testing workflows, and contribution guidelines.
+> 
+> 📚 **For project insights and design decisions**, see [LEARNINGS.md](LEARNINGS.md) for lessons learned and implementation notes.
 
 ## What You Get
 
@@ -102,6 +104,22 @@ gh auth login
 
 The GitHub CLI (`gh`) is included in the Uni Docker container.
 
+## About claude.md Files
+
+The `claude.md` file helps Claude understand your project conventions and setup.
+
+**Location**: Place in your project root
+
+**Purpose**: Documents project-specific context:
+- Framework and language choices (React, Next.js, TypeScript, etc.)
+- Coding conventions and patterns
+- Build and test procedures
+- Project structure and file organization
+
+**Format**: Human-readable Markdown documentation with optional executable actions (JSON) for patches and dependencies.
+
+Skills automatically read `claude.md` before generating code, ensuring consistency with your project's existing patterns and conventions.
+
 ## What's Inside
 
 ### Skills Library
@@ -153,7 +171,9 @@ ${UNI_SKILLS}/skills/using-skills/find-skills pattern      # Search skills
 ${UNI_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill script
 ```
 
-## Troubleshooting
+## Installation Troubleshooting
+
+### Permission Errors
 
 If the plugin reports a permissions error executing the shell script, you can explicitly set permissions on the .sh files:
 
@@ -164,7 +184,7 @@ chmod +x ~/.claude/plugins/cache/uni/lib/initialize-skills.sh
 
 Then reload VS Code. If that still doesn't work, try running session-start.sh directly to debug.
 
-### Uninstalling / Reinstalling plugins
+### Uninstalling / Reinstalling
 
 There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it, then:
 

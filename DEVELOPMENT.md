@@ -204,7 +204,6 @@ Each ADR includes:
 - **Evidence over claims** - Verify before declaring success
 - **Domain over implementation** - Work at problem level, not solution level
 
-
 ## License
 
 MIT License - see LICENSE file for details
