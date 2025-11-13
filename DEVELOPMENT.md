@@ -4,14 +4,39 @@ This guide covers development workflows, architecture details, and contribution 
 
 ## Development Environment
 
-Currently, Uni does not work in Claude Code in Windows due to problems with how file paths are handled. Supported approaches are:
+### Prerequisites
 
-### WSL
-Developing with VS Code connected to WSL is a good way to benefit from a Linux-based developer experience. Follow the guide here: https://code.visualstudio.com/docs/remote/wsl
-Once you have set up your WSL environment then you can follow the details in README.md.
+- **Python 3.11+** - Required for cross-platform session-start hook
+- **Git** - For version control and skills repository management
+- **Docker** (optional) - For containerized development environment
 
-### Mac
-On a Mac you follow the installation guidance in README.md.
+### Platform Support
+
+Uni now works across all platforms:
+- **Windows** - Native support using Python
+- **macOS** - Native support using Python
+- **Linux** - Native support using Python
+- **WSL** - Works in Windows Subsystem for Linux
+- **Docker** - Containerized environment available
+
+### Local Development (All Platforms)
+
+Once you've installed uni via the Claude plugin system, the session-start hook will automatically:
+
+1. Clone the skills repository to `~/.config/uni/core` (or `%USERPROFILE%\.config\uni\core` on Windows)
+2. Checkout the configured branch from `.uni/config.json`
+3. Create environment variables for all skills
+4. Inject skill context into Claude
+
+**Testing the hook manually:**
+
+```bash
+# Windows
+python hooks/session-start.py
+
+# Mac/Linux
+python3 hooks/session-start.py
+```
 
 ### Docker
 This repo provides a Docker-based development environment with pre-installed tools and dependencies.
@@ -56,10 +81,68 @@ docker-compose down
 
 ## Architecture
 
-The plugin is a shim that:
-- Clones/updates configured repos 
-- Registers hooks that load skills from the local repository clones
-- Offers users the option to fork the skills repos for contributions
+The plugin is a Python-based shim that:
+- Reads configuration from `.uni/config.json`
+- Clones/updates configured skill repositories to `~/.config/uni/`
+- Discovers all available skills across repositories
+- Generates full paths to skill files and includes them in session context
+- Registers hooks that inject skill context into Claude sessions
+- Works cross-platform (Windows, macOS, Linux) with automatic path normalization
+
+### Session Start Hook
+
+The `hooks/session-start.py` script runs at the start of each Claude session and:
+
+1. **Reads branch configuration** from `.uni/config.json`
+2. **Initializes repositories**:
+   - Clones if needed
+   - Fetches latest changes
+   - Switches branches if configured
+   - Fast-forwards when possible
+3. **Discovers skills**:
+   - Scans all skill directories
+   - Generates full absolute paths to each SKILL.md file
+   - Creates `UNI_SKILL_*` path references
+   - Builds skill lists for Claude
+4. **Outputs JSON context** with:
+   - Skill documentation
+   - Skill file paths
+   - Repository status
+   - Available skills list
+
+### Skill Path References
+
+The session-start hook generates full paths to skill files and includes them in the session context.
+
+**Per-Skill File Path Reference:**
+```
+UNI_SKILL_{SKILL_NAME} → full/absolute/path/to/skill/SKILL.md
+```
+
+**Base Paths:**
+```
+UNI_ROOT = ~/.config/uni
+UNI_SKILLS = ~/.config/uni/core
+```
+
+**Examples:**
+- `UNI_SKILL_BRAINSTORMING` → Full path to collaboration/brainstorming/SKILL.md
+- `UNI_SKILL_TEST_DRIVEN_DEVELOPMENT` → Full path to testing/test-driven-development/SKILL.md
+- `UNI_SKILL_SYSTEMATIC_DEBUGGING` → Full path to debugging/systematic-debugging/SKILL.md
+
+**Total:** 32+ skill path references (varies with installed skills)
+
+**How Commands Use Paths:**
+
+Commands tell Claude to look up the path reference from session context:
+```markdown
+Use the UNI_SKILL_BRAINSTORMING path from your session context to read the brainstorming skill file.
+```
+
+This approach works reliably across platforms because:
+- Paths are generated at runtime in the native format (C:/... on Windows, /home/... on Linux)
+- No environment variable substitution required
+- Claude reads paths directly from session JSON context
 
 ## Target Directory - Project Loading
 

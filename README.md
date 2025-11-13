@@ -24,6 +24,12 @@ Plus:
 
 Read the introduction: [Superpowers for Claude Code](https://blog.fsck.com/2025/10/09/superpowers/)
 
+## Prerequisites
+
+- **Python 3.11+** - Required for cross-platform compatibility
+- **Git** - For skills repository management
+- **Claude Code (VS Code Extension)** - Latest version
+
 ## Installation
 
 ### Install the plugin
@@ -63,6 +69,34 @@ ${UNI_SKILLS}/skills/using-skills/find-skills              # All skills with des
 ${UNI_SKILLS}/skills/using-skills/find-skills test         # Filter by pattern
 ${UNI_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
 ```
+
+### Environment Variables
+
+Uni creates full paths to skill files that are available in Claude's session context. These are cross-platform compatible (Windows/macOS/Linux).
+
+**Base Paths:**
+```bash
+${UNI_ROOT}    # Root directory (~/.config/uni)
+${UNI_SKILLS}  # Core skills directory (~/.config/uni/core)
+```
+
+**Skill File Paths:**
+
+On session start, Uni discovers all skills and provides their full paths via `UNI_SKILL_*` references in the session context.
+
+For example:
+- `UNI_SKILL_BRAINSTORMING` → Full path to brainstorming skill
+- `UNI_SKILL_TEST_DRIVEN_DEVELOPMENT` → Full path to TDD skill
+- `UNI_SKILL_SYSTEMATIC_DEBUGGING` → Full path to debugging skill
+
+Commands reference these by asking Claude to look them up from the session context. All 32+ skill paths are listed at session start.
+
+**Cross-Platform Compatibility:**
+
+The Python-based session-start hook handles path normalization automatically:
+- Windows: `C:/Users/.../.config/uni/core/skills/...`
+- macOS/Linux: `/home/user/.config/uni/core/skills/...`
+- Git Bash: Converts `/c/Users` to `C:/Users` automatically
 
 ### Using Slash Commands
 
@@ -173,25 +207,59 @@ ${UNI_SKILLS}/skills/using-skills/skill-run <path> [args]  # Run any skill scrip
 
 ## Installation Troubleshooting
 
-### Permission Errors
+### Python Not Found
 
-If the plugin reports a permissions error executing the shell script, you can explicitly set permissions on the .sh files:
+If you get "python command not found", ensure Python 3.11+ is installed and in your PATH:
 
-```bash
-chmod +x ~/.claude/plugins/cache/uni/hooks/session-start.sh
-chmod +x ~/.claude/plugins/cache/uni/lib/initialize-skills.sh
+**Windows:**
+```powershell
+python --version  # Should show 3.11 or higher
 ```
 
-Then reload VS Code. If that still doesn't work, try running session-start.sh directly to debug.
+**Mac/Linux:**
+```bash
+python3 --version  # Should show 3.11 or higher
+```
+
+### Testing the Hook Manually
+
+You can test the session-start hook directly:
+
+```bash
+# Windows
+python hooks/session-start.py
+
+# Mac/Linux
+python3 hooks/session-start.py
+```
+
+This should output JSON with skill information.
 
 ### Uninstalling / Reinstalling
 
-There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it, then:
+There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it:
 
+**Use the automated script (Windows):**
+```powershell
+.\reinstall-plugin.ps1
+```
+
+The script will:
+1. Remove ~/.config/uni directory
+2. Clear ~/.claude/plugins/cache/uni
+3. Remove ~/.claude/plugins/marketplaces/uni-marketplace
+4. Clear project cache
+5. Remove uni from settings.json
+
+Then restart VS Code and reinstall via `/plugin`
+
+**Manual cleanup (if script fails):**
 1. Delete the folder ~/.config/uni
-1. Delete the folder ~/.claude/plugins/cache/uni
-1. Update the file ~/.claude/settings.json to remove uni
-1. Restart vs code / claude
+2. Delete the folder ~/.claude/plugins/cache/uni
+3. Delete the folder ~/.claude/plugins/marketplaces/uni-marketplace
+4. Delete the folder ~/.claude/projects/C--dev-uni (or similar project cache)
+5. Edit ~/.claude/settings.json and remove the "uni@uni-marketplace" entry from "enabledPlugins"
+6. Restart VS Code
 
 ## License
 

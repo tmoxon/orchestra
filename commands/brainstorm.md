@@ -2,5 +2,5 @@
 description: Interactive design refinement using Socratic method
 ---
 
-Read and follow: ${UNI_SKILLS}/skills/collaboration/brainstorming/SKILL.md
-Confirm that you've found are are using the skill.
+Use the UNI_SKILL_BRAINSTORMING path from your session context to read the brainstorming skill file.
+Confirm that you've read and are using the skill.
