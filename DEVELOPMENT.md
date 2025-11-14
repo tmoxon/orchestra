@@ -85,9 +85,9 @@ The plugin is a Python-based shim that:
 - Reads configuration from `.uni/config.json`
 - Clones/updates configured skill repositories to `~/.config/uni/`
 - Discovers all available skills across repositories
-- Generates full paths to skill files and includes them in session context
+- Creates environment variables for each skill (e.g., `UNI_SKILL_BRAINSTORMING`)
 - Registers hooks that inject skill context into Claude sessions
-- Works cross-platform (Windows, macOS, Linux) with automatic path normalization
+- Works cross-platform (Windows, macOS, Linux)
 
 ### Session Start Hook
 
@@ -101,48 +101,54 @@ The `hooks/session-start.py` script runs at the start of each Claude session and
    - Fast-forwards when possible
 3. **Discovers skills**:
    - Scans all skill directories
-   - Generates full absolute paths to each SKILL.md file
-   - Creates `UNI_SKILL_*` path references
+   - Creates `UNI_SKILL_*` environment variables
    - Builds skill lists for Claude
 4. **Outputs JSON context** with:
    - Skill documentation
-   - Skill file paths
+   - Environment variables
    - Repository status
    - Available skills list
 
-### Skill Path References
+### Environment Variables
 
-The session-start hook generates full paths to skill files and includes them in the session context.
+The session-start hook creates environment variables for skills and base paths.
 
-**Per-Skill File Path Reference:**
+**Per-Skill File Path:**
 ```
-UNI_SKILL_{SKILL_NAME} → full/absolute/path/to/skill/SKILL.md
+UNI_SKILL_{SKILL_NAME} = path/to/skill/SKILL.md
 ```
 
 **Base Paths:**
 ```
 UNI_ROOT = ~/.config/uni
-UNI_SKILLS = ~/.config/uni/core
+UNI_SKILLS = ~/.config/uni/core/skills
 ```
 
 **Examples:**
-- `UNI_SKILL_BRAINSTORMING` → Full path to collaboration/brainstorming/SKILL.md
-- `UNI_SKILL_TEST_DRIVEN_DEVELOPMENT` → Full path to testing/test-driven-development/SKILL.md
-- `UNI_SKILL_SYSTEMATIC_DEBUGGING` → Full path to debugging/systematic-debugging/SKILL.md
+- `UNI_SKILL_BRAINSTORMING` → `.../collaboration/brainstorming/SKILL.md`
+- `UNI_SKILL_TEST_DRIVEN_DEVELOPMENT` → `.../testing/test-driven-development/SKILL.md`
+- `UNI_SKILL_SYSTEMATIC_DEBUGGING` → `.../debugging/systematic-debugging/SKILL.md`
 
-**Total:** 32+ skill path references (varies with installed skills)
+**Total:** 34 environment variables (2 base paths + 32 skill paths)
 
-**How Commands Use Paths:**
+**Path Construction vs Direct Variables:**
 
-Commands tell Claude to look up the path reference from session context:
-```markdown
-Use the UNI_SKILL_BRAINSTORMING path from your session context to read the brainstorming skill file.
+**Recommended approach:** Use direct skill environment variables:
+```bash
+${UNI_SKILL_BRAINSTORMING}  # Full path to SKILL.md file
 ```
 
-This approach works reliably across platforms because:
-- Paths are generated at runtime in the native format (C:/... on Windows, /home/... on Linux)
-- No environment variable substitution required
-- Claude reads paths directly from session JSON context
+**Legacy approach:** Path construction with `${UNI_SKILLS}`:
+```bash
+${UNI_SKILLS}/skills/collaboration/brainstorming/SKILL.md
+```
+
+Direct skill variables are more reliable across platforms (especially Windows) since they provide absolute paths without requiring path concatenation. Commands have been updated to use this approach.
+
+These variables are available in:
+- Command files (`commands/*.md`)
+- Claude's context during sessions
+- Any skill that references another skill
 
 ## Target Directory - Project Loading
 

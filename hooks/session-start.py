@@ -70,31 +70,9 @@ def get_skills_branch() -> str:
 
 
 def get_uni_root() -> Path:
-    """Get the UNI_ROOT directory path, handling different environments."""
+    """Get the UNI_ROOT directory path."""
+    # Check if we're running in a bash/MSYS/Cygwin environment on Windows
     home = os.environ.get('HOME', '')
-    
-    # Debug: Print what we're seeing (will appear in hook output)
-    print(f"DEBUG: HOME={home}", file=sys.stderr)
-    print(f"DEBUG: CWD={Path.cwd()}", file=sys.stderr)
-    
-    # Special case: /home/dev indicates running in a container/isolated environment
-    # Check if skills exist in common Windows locations that might be mounted
-    if home == '/home/dev':
-        # Try to find the skills in mounted Windows paths
-        possible_paths = [
-            Path('/c/Users') / os.environ.get('USERNAME', 'wbhagat') / '.config' / 'uni',
-            Path('/mnt/c/Users') / os.environ.get('USERNAME', 'wbhagat') / '.config' / 'uni',
-            Path(home) / '.config' / 'uni',  # Fallback to /home/dev/.config/uni
-        ]
-        
-        for path in possible_paths:
-            if path.exists():
-                print(f"DEBUG: Found uni at {path}", file=sys.stderr)
-                return path
-        
-        # If nothing found, default to /home/dev/.config/uni and it will be created
-        print(f"DEBUG: No existing uni found, using {possible_paths[-1]}", file=sys.stderr)
-        return possible_paths[-1]
     
     # Convert Git Bash style paths (/c/Users/...) to Windows paths (C:/Users/...)
     if home.startswith('/') and len(home) > 2 and home[2] == '/':
@@ -104,7 +82,7 @@ def get_uni_root() -> Path:
         # Convert to C:/Users/... format
         windows_path = f"{drive_letter}:/{rest_of_path}"
         return Path(windows_path) / ".config" / "uni"
-    elif home.startswith('/home/') or home.startswith('/mnt/'):
+    elif home.startswith('/home/'):
         # Real Unix/WSL path
         return Path(home) / ".config" / "uni"
     
@@ -427,12 +405,8 @@ def main():
         if any_behind:
             status_message = "\n\n⚠️ New skills available from upstream. Ask me to use the pulling-updates-from-skills-repository skill."
         
-        # Build skill paths section - these are the actual full paths to skill files
-        skill_paths_text = "\n".join(
-            f"- {key}: {value}" 
-            for key, value in sorted(env_vars.items()) 
-            if key.startswith("UNI_SKILL_")
-        )
+        # Build environment variables section
+        env_vars_text = "\n".join(f"- {key}={value}" for key, value in sorted(env_vars.items()))
         
         # Build additional context
         additional_context = f"""<EXTREMELY_IMPORTANT>
@@ -448,8 +422,8 @@ You have access to the uni.
 - Active repositories:
 {repos_list_text}
 
-**Skill File Paths (Use these paths to read skill files):**
-{skill_paths_text}
+**Environment Variables for Skills:**
+{env_vars_text}
 
 **Available skills across all repositories:**
 {all_skills_text}{status_message}

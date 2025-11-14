@@ -34,17 +34,39 @@ Read the introduction: [Superpowers for Claude Code](https://blog.fsck.com/2025/
 
 ### Install the plugin
 
-Run the following (note at time of writing the slash command doesn't work in the vs code extension):
-```bash
-claude /plugin
-```
-- Select "add marketplace"
-- Enter https://github.com/tmoxon/uni
-- Agree to set it up
-- Follow instructions to install uni
-- Restart extensions
+**Option 1: Via GitHub (Recommended)**
 
-The plugin automatically handles skills repository setup on first run.
+Clone the repository directly to your Claude plugins directory:
+
+**Windows:**
+```powershell
+# Create plugins directory if it doesn't exist
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\plugins"
+
+# Clone the repository
+cd "$env:USERPROFILE\.claude\plugins"
+git clone https://github.com/tmoxon/uni.git
+```
+
+**Mac/Linux:**
+```bash
+# Create plugins directory if it doesn't exist
+mkdir -p ~/.claude/plugins
+
+# Clone the repository
+cd ~/.claude/plugins
+git clone https://github.com/tmoxon/uni.git
+```
+
+**Option 2: Via Marketplace (if you have a marketplace set up)**
+
+If you have a uni marketplace configured:
+```bash
+/plugin marketplace add tmoxon/uni-marketplace
+/plugin install uni@uni-marketplace
+```
+
+After installation, restart Claude Code / VS Code.
 
 ### Verify Installation
 
@@ -72,31 +94,36 @@ ${UNI_SKILLS}/skills/using-skills/find-skills 'TDD|debug'  # Regex pattern
 
 ### Environment Variables
 
-Uni creates full paths to skill files that are available in Claude's session context. These are cross-platform compatible (Windows/macOS/Linux).
+Uni creates environment variables for easy skill access. These use forward slashes for cross-platform compatibility.
 
 **Base Paths:**
 ```bash
 ${UNI_ROOT}    # Root directory (~/.config/uni)
-${UNI_SKILLS}  # Core skills directory (~/.config/uni/core)
+${UNI_SKILLS}  # Skills directory (~/.config/uni/core/skills)
 ```
 
-**Skill File Paths:**
+**Skill File Paths (32 skills):**
+```bash
+${UNI_SKILL_BRAINSTORMING}           # → .../brainstorming/SKILL.md
+${UNI_SKILL_TEST_DRIVEN_DEVELOPMENT} # → .../test-driven-development/SKILL.md
+${UNI_SKILL_SYSTEMATIC_DEBUGGING}    # → .../systematic-debugging/SKILL.md
+# ... and 29 more
+```
 
-On session start, Uni discovers all skills and provides their full paths via `UNI_SKILL_*` references in the session context.
+**Using Paths in Commands:**
 
-For example:
-- `UNI_SKILL_BRAINSTORMING` → Full path to brainstorming skill
-- `UNI_SKILL_TEST_DRIVEN_DEVELOPMENT` → Full path to TDD skill
-- `UNI_SKILL_SYSTEMATIC_DEBUGGING` → Full path to debugging skill
+**Recommended:** Use direct skill environment variables for maximum compatibility:
+```bash
+${UNI_SKILL_BRAINSTORMING}           # Direct path to SKILL.md
+${UNI_SKILL_TEST_DRIVEN_DEVELOPMENT} # Works reliably on all platforms
+```
 
-Commands reference these by asking Claude to look them up from the session context. All 32+ skill paths are listed at session start.
+**Alternative:** Path construction (may have issues on Windows):
+```bash
+${UNI_SKILLS}/skills/collaboration/brainstorming/SKILL.md
+```
 
-**Cross-Platform Compatibility:**
-
-The Python-based session-start hook handles path normalization automatically:
-- Windows: `C:/Users/.../.config/uni/core/skills/...`
-- macOS/Linux: `/home/user/.config/uni/core/skills/...`
-- Git Bash: Converts `/c/Users` to `C:/Users` automatically
+All 34 environment variables are listed at session start.
 
 ### Using Slash Commands
 
@@ -237,29 +264,12 @@ This should output JSON with skill information.
 
 ### Uninstalling / Reinstalling
 
-There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it:
+There appear to be bugs in handling plugins through the marketplace connections. If you run into problems and can't uninstall it, then:
 
-**Use the automated script (Windows):**
-```powershell
-.\reinstall-plugin.ps1
-```
-
-The script will:
-1. Remove ~/.config/uni directory
-2. Clear ~/.claude/plugins/cache/uni
-3. Remove ~/.claude/plugins/marketplaces/uni-marketplace
-4. Clear project cache
-5. Remove uni from settings.json
-
-Then restart VS Code and reinstall via `/plugin`
-
-**Manual cleanup (if script fails):**
 1. Delete the folder ~/.config/uni
-2. Delete the folder ~/.claude/plugins/cache/uni
-3. Delete the folder ~/.claude/plugins/marketplaces/uni-marketplace
-4. Delete the folder ~/.claude/projects/C--dev-uni (or similar project cache)
-5. Edit ~/.claude/settings.json and remove the "uni@uni-marketplace" entry from "enabledPlugins"
-6. Restart VS Code
+1. Delete the folder ~/.claude/plugins/cache/uni
+1. Update the file ~/.claude/settings.json to remove uni
+1. Restart vs code / claude
 
 ## License
 
